@@ -3,3 +3,6 @@ psycopg2
 django-extensions==2.1.0
 redis==2.10.3
 django-redis==4.9.0
+djangorestframework==3.8.2
+djangorestframework-jwt==1.11.0
+djoser==1.2.1
