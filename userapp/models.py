@@ -33,6 +33,7 @@ class SpaUserManager(BaseUserManager):
 
 class SpaUser(AbstractBaseUser):
     email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
+    money = models.FloatField(default=0.)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     objects = SpaUserManager()
