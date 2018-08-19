@@ -1,0 +1,194 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.flex-container {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-left {
+    position: absolute;
+    top: 22vh;
+    left: 31%;
+}
+
+.button-right {
+    position: absolute;
+    top: 22vh;
+    left: 65%;
+}
+
+#login_title {
+  text-align: center;
+}
+
+.elements-containers{
+  padding: 5px;
+}
+
+
+.home-paper-containers {
+  height: 400px;
+  width: 30%;
+  margin: 20px;
+  text-align: center;
+  display: inline-block;
+}
+
+.match-team-containers {
+  height: 620px;
+  margin: 1%;
+  width: 27%;
+  text-align: center;
+  display: inline-block;
+  vertical-align: top;
+  /*float: left;*/
+}
+
+.match-stadium-containers {
+  height: 620px;
+  margin: 1%;
+  width: 40%;
+  text-align: center;
+  display: inline-block;
+  vertical-align: top;
+  /*float: left;*/
+}
+
+.login-containers {
+  height: 620px;
+  margin: 0 auto;
+  width: 40%;
+  text-align: center;
+}
+
+#stadium-img {
+  width: 100%;
+  height: 30vh;
+}
+
+.container {
+  width: 100%;
+  margin: 0 auto;
+  height: auto;
+}
+
+.details-container {
+  width: 98%;
+  margin: 0 auto;
+  height: auto;
+}
+
+#description_text {
+  padding-top: 10px;
+  font-size: 20px;
+  padding-bottom: 12px;
+}
+
+.searchbar-date{
+  margin-top: 15px;
+}
+
+.mobile-list{
+  text-align: left;
+}
+
+@media screen and (max-width: 800px){
+
+  .match-team-containers {
+    height: auto;
+    width: 90%;
+    margin: 20px;
+    text-align: center;
+    float: none;
+  }
+
+  .match-stadium-containers {
+    height: auto;
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+    float: none;
+  }
+
+  .login-containers {
+    height: 620px;
+    margin: 0 auto;
+    width: 90%;
+    text-align: center;
+  }
+
+  .button-left {
+      position: absolute;
+      top: 20vh;
+      left: 1%;
+  }
+
+  .button-right {
+      position: absolute;
+      top: 20vh;
+      left: 83%;
+  }
+
+  .details-container {
+    width: 100%;
+    margin: 0 auto;
+    height: auto;
+  }
+
+}
+
+@media screen and (max-width: 530px){
+
+  .button-right {
+      position: absolute;
+      top: 20vh;
+      left: 83%;
+  }
+
+}
+
+
+@media screen and (max-width: 360px){
+
+  .button-right {
+      position: absolute;
+      top: 20vh;
+      left: 80%;
+  }
+
+}
