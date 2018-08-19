@@ -23,5 +23,6 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('', views.index, name='index'),
     path('api/', include('djoser.urls')),
-    path('api/', include('djoser.urls.jwt'))
+    path('api/', include('djoser.urls.jwt')),
+    path('api/transfers', views.exchange_list, name="transfers")
 ]

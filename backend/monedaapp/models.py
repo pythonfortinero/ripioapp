@@ -11,6 +11,6 @@ class Exchange(models.Model):
 class ExchangeRow(models.Model):
 
     user = models.ForeignKey(SpaUser, on_delete=models.CASCADE)
-    exchange = models.ForeignKey(Exchange, on_delete=models.CASCADE)
+    exchange = models.ForeignKey(Exchange, on_delete=models.CASCADE, related_name='rows')
     money_in = models.FloatField(default=0.)
     money_out = models.FloatField(default=0.)
