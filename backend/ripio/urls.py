@@ -16,13 +16,14 @@ Including another URLconf
 from django.contrib import admin
 # from django.contrib.auth import views as auth_views
 from django.urls import path, include
-from monedaapp import views
+from monedaapp import views as moneda_views
+from userapp import views as user_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('', views.index, name='index'),
     path('api/', include('djoser.urls')),
     path('api/', include('djoser.urls.jwt')),
-    path('api/transfers', views.exchange_list, name="transfers")
+    path('api/<int:user_id>/transfers', moneda_views.exchange_list, name="transfers"),
+    path('api/<int:user_id>/balance', user_views.money_balance, name="balance")
 ]

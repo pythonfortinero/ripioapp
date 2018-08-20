@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 
 
@@ -15,6 +16,15 @@ class SpaUserManager(BaseUserManager):
         )
         user.set_password(password)
         user.save(using=self._db)
+        from monedaapp.models import Exchange, ExchangeRow
+        e = Exchange()
+        e.description = "Credito de invitacion"
+        e.save()
+        er = ExchangeRow()
+        er.user = user
+        er.money_in = 100
+        er.money_out = 0
+        er.save()
         return user
 
     def create_superuser(self, email, password):
@@ -33,11 +43,15 @@ class SpaUserManager(BaseUserManager):
 
 class SpaUser(AbstractBaseUser):
     email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
-    money = models.FloatField(default=0.)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     objects = SpaUserManager()
     USERNAME_FIELD = 'email'
+
+    @property
+    def money_balance(self):
+        balance = self.transfers.aggregate(balance=(Sum('money_in') - Sum('money_out')))
+        return balance['balance']
 
     def __str__(self):
         return self.email
