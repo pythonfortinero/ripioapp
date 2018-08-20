@@ -51,9 +51,13 @@ class Home extends Component{
                       secondaryText={item.timestamp}
                       initiallyOpen={false}
                       primaryTogglesNestedList={true}
-                      nestedItems={ item.rows.map((row, index) => <ListItem 
+                      nestedItems={ item.rows
+                        .filter((row) => {
+                          return row.user === this.props.user.id
+                        })
+                        .map((row, index) => <ListItem 
                         key={row.index } 
-                        primaryText={row.user} 
+                        primaryText={"Entrada: " + row.money_in + " Salida: " + row.money_out} 
                       />) }
                     />
                   })}
