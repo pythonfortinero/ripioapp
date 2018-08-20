@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'userapp',
     'rest_framework',
     'rest_framework_jwt',
+    'django_elasticsearch_dsl',
     'djoser',
     'django_extensions',
     'django.contrib.admin',
@@ -131,6 +132,11 @@ CACHES = {
     }
 }
 
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'elasticsearch://elasticsearch:9200'
+    },
+}
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 

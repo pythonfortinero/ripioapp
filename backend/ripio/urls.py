@@ -25,5 +25,6 @@ urlpatterns = [
     path('api/', include('djoser.urls')),
     path('api/', include('djoser.urls.jwt')),
     path('api/<int:user_id>/transfers', moneda_views.exchange_list, name="transfers"),
-    path('api/<int:user_id>/balance', user_views.money_balance, name="balance")
+    path('api/<int:user_id>/balance', user_views.money_balance, name="balance"),
+    path('api/search_mail', user_views.search_mail, name="search_mail")
 ]
