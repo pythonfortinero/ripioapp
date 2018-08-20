@@ -38,7 +38,7 @@ class Login extends Component{
 		return(
 			<MuiThemeProvider>
 				<div className="login-containers">
-					<h1 className="super-font big" >Transfer Free</h1>
+					<h1 className="super-font big" >Ripio test</h1>
 					<Paper  zDepth={2} >
 	              		<Tabs >
 			              <Tab label="Ingresar" >

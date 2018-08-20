@@ -106,6 +106,17 @@ export function closeSnackbar(){
   }
 }
 
+export function changeToLogin(){
+  return dispatch => {
+    dispatch({
+      type: UPDATEUSERVALUES,
+      data: {
+        login: false
+      }
+    });
+  }
+}
+
 export function loginUser(email, password, history){
   return dispatch => {
     axios

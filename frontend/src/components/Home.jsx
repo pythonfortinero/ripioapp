@@ -3,14 +3,23 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import Transfers from './Transfers';
 import {List, ListItem} from 'material-ui/List';
 import { connect } from 'react-redux';
+import AppBar from 'material-ui/AppBar';
+import MenuItem from 'material-ui/MenuItem';
+import Drawer from 'material-ui/Drawer';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {
-  getMyData
+  getMyData,
+  changeToLogin
 } from '../actions';
 import '../css/App.css';
 
 
 class Home extends Component{
+
+  constructor(props){
+    super(props);
+    this.state = { drawer: false };
+  }
 
   componentWillMount(){
     if (this.props.user.login === false)
@@ -20,10 +29,26 @@ class Home extends Component{
     }
   }
 
+  openDrawer = () => this.setState({drawer: true});
+
+  closeDrawer = (open) => {
+    this.setState({drawer: false});
+  }
+
+  logOut = () => {
+    this.props.changeToLogin()
+    this.props.history.push('/login');
+  }
+
+
   render(){
     return (
       <MuiThemeProvider>
         <div>
+          <AppBar 
+            title="Ripio test" 
+            onLeftIconButtonTouchTap={ this.openDrawer }
+          />
           <Tabs>
             <Tab label="Balance" >
               <div>
@@ -71,6 +96,9 @@ class Home extends Component{
               <Transfers />
             </Tab>
           </Tabs>
+          <Drawer open={this.state.drawer} docked={false} onRequestChange={this.closeDrawer} >
+            <MenuItem onClick={ this.logOut }>Cerrar sesion</MenuItem>
+          </Drawer>
         </div>
       </MuiThemeProvider>
     );  
@@ -78,5 +106,6 @@ class Home extends Component{
 } 
 
 export default connect( state => state, {
-  getMyData
+  getMyData,
+  changeToLogin
 })(Home);
