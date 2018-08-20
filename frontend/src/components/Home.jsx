@@ -5,14 +5,34 @@ import {
   StepLabel,
   StepContent,
 } from 'material-ui/Stepper';
+import AutoComplete from 'material-ui/AutoComplete';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
+import Snackbar from 'material-ui/Snackbar';
 import { connect } from 'react-redux';
+import {
+  updateToEmailTransfer,
+  updateToAmountTransfer,
+  updateDescriptionTransfer,
+  updateToIdTransfer,
+  getMyData,
+  makeTransfer,
+  searchName
+} from '../actions';
 import '../css/App.css';
 
 
 class Home extends Component {
+
+  componentWillMount(){
+    if (this.props.user.login === false)
+      this.props.history.replace('/login');
+    else{
+      this.props.getMyData(this.props.user.access_token)
+    }
+  }
 
   state = {
     finished: false,
@@ -21,6 +41,9 @@ class Home extends Component {
 
   handleNext = () => {
     const {stepIndex} = this.state;
+    if (stepIndex === 2){
+      this.props.makeTransfer(this.props.transfer, this.props.user)
+    }
     this.setState({
       stepIndex: stepIndex + 1,
       finished: stepIndex >= 2,
@@ -33,6 +56,20 @@ class Home extends Component {
       this.setState({stepIndex: stepIndex - 1});
     }
   };
+
+  handleSearchNames = (value) => {
+    this.props.updateToEmailTransfer(value);
+    if(this.props.transfer.namesSearched.length){
+      let to_id = this.props.transfer.namesSearched.filter((item)=>{
+        return item.email === value;
+      })
+      if(to_id){
+        this.props.updateToIdTransfer(to_id[0].id);
+      }
+    }
+    if(value.length > 1)
+      this.props.searchName(this.props.user.access_token, value)
+  }
 
   renderStepActions(step) {
     const {stepIndex} = this.state;
@@ -62,59 +99,101 @@ class Home extends Component {
 
   render() {
     const {finished, stepIndex} = this.state;
-
+    let dataSource = [];
+    if(this.props.transfer.namesSearched.length){
+      dataSource = this.props.transfer.namesSearched.map((item)=>{
+        return item.email;
+      })
+    }
     return (
       <MuiThemeProvider>
       <div style={{maxWidth: 380, maxHeight: 400, margin: 'auto'}}>
         <Stepper activeStep={stepIndex} orientation="vertical">
           <Step>
-            <StepLabel>Select campaign settings</StepLabel>
+            <StepLabel>Buscar usuario a transferir.</StepLabel>
             <StepContent>
-              <p>
-                For each ad campaign that you create, you can control how much
-                you're willing to spend on clicks and conversions, which networks
-                and geographical locations you want your ads to show on, and more.
-              </p>
+              <AutoComplete
+                  hintText="Buscar por email"
+                  dataSource={ dataSource }
+                  onUpdateInput={this.handleSearchNames}
+                  searchText={this.props.transfer.to_email}
+                  fullWidth={true}
+              />
               {this.renderStepActions(0)}
             </StepContent>
           </Step>
           <Step>
-            <StepLabel>Create an ad group</StepLabel>
+            <StepLabel>Monto a transferir</StepLabel>
             <StepContent>
-              <p>An ad group contains one or more ads which target a shared set of keywords.</p>
+              <p>Ingrese monto a transferir.</p>
+              <TextField 
+                  hintText="Monto"
+                  fullWidth={true}
+                  type="number"
+                  onChange={(e) => this.props.updateToAmountTransfer(e.target.value)}
+                  value={this.props.transfer.to_amount}
+                />
               {this.renderStepActions(1)}
             </StepContent>
           </Step>
           <Step>
-            <StepLabel>Create an ad</StepLabel>
+            <StepLabel>Confirmar transferencia</StepLabel>
             <StepContent>
-              <p>
-                Try out different ad text to see what brings in the most customers,
-                and learn how to enhance your ads using features like ad extensions.
-                If you run into any problems with your ads, find out how to tell if
-                they're running and how to resolve approval issues.
-              </p>
+              <TextField 
+                  hintText="Email"
+                  fullWidth={true}
+                  value={this.props.transfer.to_email}
+                  disabled={true}
+                />
+              <TextField 
+                  hintText="Monto"
+                  fullWidth={true}
+                  type="number"
+                  value={this.props.transfer.to_amount}
+                  disabled={true}
+                />
+                <TextField 
+                  hintText="Motivo"
+                  fullWidth={true}
+                  value={this.props.transfer.description}
+                  onChange={(e) => this.props.updateDescriptionTransfer(e.target.value)}
+                />
               {this.renderStepActions(2)}
             </StepContent>
           </Step>
         </Stepper>
         {finished && (
           <p style={{margin: '20px 0', textAlign: 'center'}}>
-            <a
+            
+            Transferencia realizada con exito. <a
               href="#"
               onClick={(event) => {
                 event.preventDefault();
                 this.setState({stepIndex: 0, finished: false});
               }}
             >
-              Click here
-            </a> to reset the example.
+              Nueva Transferencia
+            </a>
           </p>
         )}
       </div>
+      <Snackbar
+        open={this.props.user.openSnackbar}
+        message={this.props.user.snackBarResponse}
+        autoHideDuration={4000}
+        onRequestClose={this.props.closeSnackbar}
+      />
       </MuiThemeProvider>
     );
   }
 }
 
-export default connect( state => state, {})(Home);
+export default connect( state => state, {
+  updateToEmailTransfer,
+  updateToAmountTransfer,
+  updateDescriptionTransfer,
+  updateToIdTransfer,
+  getMyData,
+  makeTransfer,
+  searchName
+})(Home);

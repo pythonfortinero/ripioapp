@@ -3,7 +3,9 @@ import {
   SNACKBAR_RESPONSE
 } from '../constants';
 
-const defaultUser = {};
+const defaultUser = {
+	login: false
+};
 
 const user = (state = defaultUser, action) => {
   switch(action.type){

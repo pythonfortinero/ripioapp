@@ -20,7 +20,6 @@ import {
 class Login extends Component{
 
 	login = () => {
-		debugger
 		this.props.loginUser(
 			this.props.user.loginemail,
 			this.props.user.loginpassword,
@@ -29,7 +28,6 @@ class Login extends Component{
 	}
 
 	signUp = () => {
-		debugger
 		this.props.signUpUser(
 			this.props.user.signupemail,
 			this.props.user.signuppassword
@@ -75,7 +73,7 @@ class Login extends Component{
 			                    onChange={(e) => this.props.updateSignUpEmailValue(e.target.value)}
 			                    type="email"
 			                    fullWidth={true}
-			                    //value={this.props.user.signupemail}
+			                    value={this.props.user.signupemail}
 			                  />
 			                  <br />
 			                  <TextField
