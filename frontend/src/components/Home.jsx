@@ -1,30 +1,16 @@
 import React, { Component } from 'react';
-import {
-  Step,
-  Stepper,
-  StepLabel,
-  StepContent,
-} from 'material-ui/Stepper';
-import AutoComplete from 'material-ui/AutoComplete';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import TextField from 'material-ui/TextField';
-import Snackbar from 'material-ui/Snackbar';
+import {Tabs, Tab} from 'material-ui/Tabs';
+import Transfers from './Transfers';
+import {List, ListItem} from 'material-ui/List';
 import { connect } from 'react-redux';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {
-  updateToEmailTransfer,
-  updateToAmountTransfer,
-  updateDescriptionTransfer,
-  updateToIdTransfer,
-  getMyData,
-  makeTransfer,
-  searchName
+  getMyData
 } from '../actions';
 import '../css/App.css';
 
 
-class Home extends Component {
+class Home extends Component{
 
   componentWillMount(){
     if (this.props.user.login === false)
@@ -34,166 +20,59 @@ class Home extends Component {
     }
   }
 
-  state = {
-    finished: false,
-    stepIndex: 0,
-  };
-
-  handleNext = () => {
-    const {stepIndex} = this.state;
-    if (stepIndex === 2){
-      this.props.makeTransfer(this.props.transfer, this.props.user)
-    }
-    this.setState({
-      stepIndex: stepIndex + 1,
-      finished: stepIndex >= 2,
-    });
-  };
-
-  handlePrev = () => {
-    const {stepIndex} = this.state;
-    if (stepIndex > 0) {
-      this.setState({stepIndex: stepIndex - 1});
-    }
-  };
-
-  handleSearchNames = (value) => {
-    this.props.updateToEmailTransfer(value);
-    if(this.props.transfer.namesSearched.length){
-      let to_id = this.props.transfer.namesSearched.filter((item)=>{
-        return item.email === value;
-      })
-      if(to_id){
-        this.props.updateToIdTransfer(to_id[0].id);
-      }
-    }
-    if(value.length > 1)
-      this.props.searchName(this.props.user.access_token, value)
-  }
-
-  renderStepActions(step) {
-    const {stepIndex} = this.state;
-
-    return (
-      <div style={{margin: '12px 0'}}>
-        <RaisedButton
-          label={stepIndex === 2 ? 'Finish' : 'Next'}
-          disableTouchRipple={true}
-          disableFocusRipple={true}
-          primary={true}
-          onClick={this.handleNext}
-          style={{marginRight: 12}}
-        />
-        {step > 0 && (
-          <FlatButton
-            label="Back"
-            disabled={stepIndex === 0}
-            disableTouchRipple={true}
-            disableFocusRipple={true}
-            onClick={this.handlePrev}
-          />
-        )}
-      </div>
-    );
-  }
-
-  render() {
-    const {finished, stepIndex} = this.state;
-    let dataSource = [];
-    if(this.props.transfer.namesSearched.length){
-      dataSource = this.props.transfer.namesSearched.map((item)=>{
-        return item.email;
-      })
-    }
+  render(){
     return (
       <MuiThemeProvider>
-      <div style={{maxWidth: 380, maxHeight: 400, margin: 'auto'}}>
-        <Stepper activeStep={stepIndex} orientation="vertical">
-          <Step>
-            <StepLabel>Buscar usuario a transferir.</StepLabel>
-            <StepContent>
-              <AutoComplete
-                  hintText="Buscar por email"
-                  dataSource={ dataSource }
-                  onUpdateInput={this.handleSearchNames}
-                  searchText={this.props.transfer.to_email}
-                  fullWidth={true}
-              />
-              {this.renderStepActions(0)}
-            </StepContent>
-          </Step>
-          <Step>
-            <StepLabel>Monto a transferir</StepLabel>
-            <StepContent>
-              <p>Ingrese monto a transferir.</p>
-              <TextField 
-                  hintText="Monto"
-                  fullWidth={true}
-                  type="number"
-                  onChange={(e) => this.props.updateToAmountTransfer(e.target.value)}
-                  value={this.props.transfer.to_amount}
-                />
-              {this.renderStepActions(1)}
-            </StepContent>
-          </Step>
-          <Step>
-            <StepLabel>Confirmar transferencia</StepLabel>
-            <StepContent>
-              <TextField 
-                  hintText="Email"
-                  fullWidth={true}
-                  value={this.props.transfer.to_email}
-                  disabled={true}
-                />
-              <TextField 
-                  hintText="Monto"
-                  fullWidth={true}
-                  type="number"
-                  value={this.props.transfer.to_amount}
-                  disabled={true}
-                />
-                <TextField 
-                  hintText="Motivo"
-                  fullWidth={true}
-                  value={this.props.transfer.description}
-                  onChange={(e) => this.props.updateDescriptionTransfer(e.target.value)}
-                />
-              {this.renderStepActions(2)}
-            </StepContent>
-          </Step>
-        </Stepper>
-        {finished && (
-          <p style={{margin: '20px 0', textAlign: 'center'}}>
-            
-            Transferencia realizada con exito. <a
-              href="#"
-              onClick={(event) => {
-                event.preventDefault();
-                this.setState({stepIndex: 0, finished: false});
-              }}
+        <div>
+          <Tabs>
+            <Tab label="Balance" >
+              <div>
+                <h2>Saldo</h2>
+                <p>
+                  tu saldo actual es:
+                </p>
+                <h3>
+                  {this.props.user.balance}
+                </h3>
+              </div>
+            </Tab>
+            <Tab label="Mis transferencias" >
+              <div>
+                <h2>Mis transferencias</h2>
+                <p>
+                  listado de todas de transferencias 
+                </p>
+                <List>
+                  {(this.props.user.transfers && this.props.user.transfers.length) 
+                    && this.props.user.transfers.map((item)=> {
+                    return <ListItem 
+                      key = { item.id }
+                      primaryText={item.description}
+                      secondaryText={item.timestamp}
+                      initiallyOpen={false}
+                      primaryTogglesNestedList={true}
+                      nestedItems={ item.rows.map((row, index) => <ListItem 
+                        key={row.index } 
+                        primaryText={row.user} 
+                      />) }
+                    />
+                  })}
+                </List>
+              </div>
+            </Tab>
+            <Tab
+              label="Nueva transferencia"
+              //onActive={handleActive}
             >
-              Nueva Transferencia
-            </a>
-          </p>
-        )}
-      </div>
-      <Snackbar
-        open={this.props.user.openSnackbar}
-        message={this.props.user.snackBarResponse}
-        autoHideDuration={4000}
-        onRequestClose={this.props.closeSnackbar}
-      />
+              <Transfers />
+            </Tab>
+          </Tabs>
+        </div>
       </MuiThemeProvider>
-    );
+    );  
   }
-}
+} 
 
 export default connect( state => state, {
-  updateToEmailTransfer,
-  updateToAmountTransfer,
-  updateDescriptionTransfer,
-  updateToIdTransfer,
-  getMyData,
-  makeTransfer,
-  searchName
+  getMyData
 })(Home);
