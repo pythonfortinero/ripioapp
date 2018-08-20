@@ -21,4 +21,4 @@ def search_mail(request):
     email = request.GET.get('email')
     print("llego", email)
     docs = SpaUserDocument.search().query("match", email=email)
-    return Response([{'email': d.email} for d in docs])
+    return Response([{'email': d.email, "id": d.id} for d in docs])

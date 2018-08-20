@@ -24,6 +24,7 @@ class SpaUserManager(BaseUserManager):
         er.user = user
         er.money_in = 100
         er.money_out = 0
+        er.exchange = e
         er.save()
         return user
 

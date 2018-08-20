@@ -10,4 +10,4 @@ class SpaUserDocument(DocType):
     class Meta:
         model = SpaUser
 
-        fields = ['email']
+        fields = ['email', 'id']
