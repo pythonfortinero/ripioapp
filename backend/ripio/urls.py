@@ -21,7 +21,6 @@ from userapp import views as user_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('django.contrib.auth.urls')),
     path('api/', include('djoser.urls')),
     path('api/', include('djoser.urls.jwt')),
     path('api/<int:user_id>/transfers', moneda_views.exchange_list, name="transfers"),

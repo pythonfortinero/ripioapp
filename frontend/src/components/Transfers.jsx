@@ -68,7 +68,7 @@ class Transfers extends Component {
     return (
       <div style={{margin: '12px 0'}}>
         <RaisedButton
-          label={stepIndex === 2 ? 'Finish' : 'Next'}
+          label={stepIndex === 2 ? 'Finalizar' : 'Siguiente'}
           disableTouchRipple={true}
           disableFocusRipple={true}
           primary={true}
@@ -77,7 +77,7 @@ class Transfers extends Component {
         />
         {step > 0 && (
           <FlatButton
-            label="Back"
+            label="Atras"
             disabled={stepIndex === 0}
             disableTouchRipple={true}
             disableFocusRipple={true}

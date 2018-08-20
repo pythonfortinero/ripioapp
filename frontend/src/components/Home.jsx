@@ -51,7 +51,7 @@ class Home extends Component{
           />
           <Tabs>
             <Tab label="Balance" >
-              <div>
+              <div style={{maxWidth: 380, maxHeight: 400, margin: 'auto'}}>
                 <h2>Saldo</h2>
                 <p>
                   tu saldo actual es:
@@ -62,7 +62,7 @@ class Home extends Component{
               </div>
             </Tab>
             <Tab label="Mis transferencias" >
-              <div>
+              <div style={{maxWidth: 380, maxHeight: 400, margin: 'auto'}}>
                 <h2>Mis transferencias</h2>
                 <p>
                   listado de todas de transferencias 
