@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Transfers from './Transfers';
 import {List, ListItem} from 'material-ui/List';
+import RaisedButton from 'material-ui/RaisedButton';
 import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import MenuItem from 'material-ui/MenuItem';
@@ -9,7 +10,11 @@ import Drawer from 'material-ui/Drawer';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {
   getMyData,
-  changeToLogin
+  changeToLogin,
+  getMyBalance,
+  getYourMoney,
+  getMyTransfers,
+  closeSnackbar
 } from '../actions';
 import '../css/App.css';
 
@@ -18,7 +23,7 @@ class Home extends Component{
 
   constructor(props){
     super(props);
-    this.state = { drawer: false };
+    this.state = { drawer: false, work: 0 };
   }
 
   componentWillMount(){
@@ -30,6 +35,16 @@ class Home extends Component{
   }
 
   openDrawer = () => this.setState({drawer: true});
+
+  workForMoney = () => {
+    if (this.state.work === 10){
+      this.setState({work: 0})
+      this.props.getYourMoney(this.props.user)
+    } else {
+      this.setState({work: this.state.work + 1}) 
+    }
+    
+  }
 
   closeDrawer = (open) => {
     this.setState({drawer: false});
@@ -59,6 +74,29 @@ class Home extends Component{
                 <h3>
                   {this.props.user.balance}
                 </h3>
+                <RaisedButton
+                  label={'Actualizar'}
+                  disableTouchRipple={true}
+                  disableFocusRipple={true}
+                  primary={true}
+                  onClick={() => this.props.getMyBalance(
+                    this.props.user.id,
+                    this.props.user.access_token
+                    )}
+                  style={{marginRight: 12}}
+                />
+                <h2>Gane dinero</h2>
+                <p>
+                  cada 10 click ganas 1 punto en tu cuenta
+                </p>
+                <RaisedButton
+                  label={'Trabajar ('+ this.state.work + ')'}
+                  disableTouchRipple={true}
+                  disableFocusRipple={true}
+                  primary={true}
+                  onClick={ this.workForMoney }
+                  style={{marginRight: 12}}
+                />
               </div>
             </Tab>
             <Tab label="Mis transferencias" >
@@ -67,6 +105,17 @@ class Home extends Component{
                 <p>
                   listado de todas de transferencias 
                 </p>
+                <RaisedButton
+                  label={'Actualizar'}
+                  disableTouchRipple={true}
+                  disableFocusRipple={true}
+                  primary={true}
+                  onClick={() => this.props.getMyTransfers(
+                    this.props.user.id,
+                    this.props.user.access_token
+                    )}
+                  style={{marginRight: 12}}
+                />
                 <List>
                   {(this.props.user.transfers && this.props.user.transfers.length) 
                     && this.props.user.transfers.map((item)=> {
@@ -107,5 +156,9 @@ class Home extends Component{
 
 export default connect( state => state, {
   getMyData,
-  changeToLogin
+  changeToLogin,
+  getMyBalance,
+  getYourMoney,
+  getMyTransfers,
+  closeSnackbar
 })(Home);

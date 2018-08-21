@@ -146,7 +146,6 @@ export function getMyData(token){
       headers: { Authorization: "JWT " + token }
     })
     .then((response) => {
-      debugger
       dispatch({
         type: UPDATEUSERVALUES,
         data: response.data
@@ -156,7 +155,6 @@ export function getMyData(token){
         headers: { Authorization: "JWT " + token }
       })
       .then((balance_response) => {
-        debugger
         dispatch({
           type: UPDATEUSERVALUES,
           data: {
@@ -190,39 +188,91 @@ export function getMyData(token){
   }
 }
 
+export function getYourMoney(user){
+  return dispatch => {
+    axios
+    .post('http://localhost:8000/api/'+ user.id +'/transfers',{
+      rows: [
+        {
+          user: user.id,
+          money_in: 1,
+          money_out: 0
+        }
+      ],
+      description: 'Te lo ganaste con tu trabajo, Felicidades!!'
+    },{
+      headers: { Authorization: "JWT " + user.access_token }
+    })
+    .then((response)=> {
+      dispatch({
+        type: SNACKBAR_RESPONSE,
+        data: {
+          openSnackbar: true,
+          snackBarResponse: 'Ganaste 1 punto, Felicidades!!'
+        }
+      })
+      dispatch({
+        type: UPDATETRANSFERATTRIBUTES,
+        data: {
+          description: '',
+          to_id: '',
+          to_email: '',
+          to_amount: ''
+        }
+      })
+      console.log('transferencia realizada')
+    })
+    .catch((error) => {
+      dispatch({
+        type: SNACKBAR_RESPONSE,
+        data: {
+          openSnackbar: true,
+          snackBarResponse: 'Error al realizar la transferencia'
+        }
+      })
+    })
+  }
+}
 
 export function getMyBalance(user, token){
   return dispatch => {
-    axios.get('http://localhost:8000/api/'+ user +'/balance', {
-      headers: { Authorization: "JWT " + token }
-    })
-    .then((response) => {
-      dispatch({
-        type: UPDATEUSERVALUES,
-        data: response.data
+    if (user && token){
+      axios.get('http://localhost:8000/api/'+ user +'/balance', {
+        headers: { Authorization: "JWT " + token }
       })
-    })
-    .catch((error) => {
-      console.log(error.message)
-    })
-    
+      .then((response) => {
+        dispatch({
+          type: UPDATEUSERVALUES,
+          data: {
+            balance: response.data[0].money_balance
+          }
+        })
+      })
+      .catch((error) => {
+        console.log(error.message)
+      });
+    }
   }
 }
 
 export function getMyTransfers(user, token){
   return dispatch => {
-    axios.get('http://localhost:8000/api/'+ user +'/transfers', {
-      headers: { Authorization: "JWT " + token }
-    })
-    .then((response) => {
-      dispatch({
-        type: UPDATEUSERVALUES,
-        data: response.data
+    if (user && token){
+      axios.get('http://localhost:8000/api/'+ user +'/transfers', {
+        headers: { Authorization: "JWT " + token }
       })
-    })
-    .catch((error) => {
-      console.log(error.message)
-    })  
+      .then((response) => {
+        dispatch({
+          type: UPDATEUSERVALUES,
+          data: {
+            transfers: response.data
+          }
+        })
+      })
+      .catch((error) => {
+        console.log(error.message)
+      });
+    }
   }
 }
 
@@ -272,7 +322,6 @@ export function updateToIdTransfer(value){
 
 export function makeTransfer(to, from){
   return dispatch => {
-    debugger
     axios
     .post('http://localhost:8000/api/'+ from.id +'/transfers',{
       rows: [

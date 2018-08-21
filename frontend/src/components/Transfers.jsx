@@ -18,6 +18,7 @@ import {
   updateToIdTransfer,
   getMyData,
   makeTransfer,
+  closeSnackbar,
   searchName
 } from '../actions';
 import '../css/App.css';
@@ -185,5 +186,6 @@ export default connect( state => state, {
   updateToIdTransfer,
   getMyData,
   makeTransfer,
+  closeSnackbar,
   searchName
 })(Transfers);
