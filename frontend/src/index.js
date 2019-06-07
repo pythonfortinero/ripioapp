@@ -6,10 +6,8 @@ import { ConnectedRouter } from 'react-router-redux'
 import Login from './components/Login';
 import Home from './components/Home';
 import './css/index.css'
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import { configureStore, history } from './reducers/configureStore';
 
-injectTapEventPlugin();
 
 const store = configureStore();
 

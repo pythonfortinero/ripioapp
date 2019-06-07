@@ -120,7 +120,7 @@ export function changeToLogin(){
 export function loginUser(email, password, history){
   return dispatch => {
     axios
-    .post('http://localhost:8000/api/jwt/create', {
+    .post('http://localhost:8000/api/token/create', {
       email: email,
       password: password
     })
@@ -128,7 +128,7 @@ export function loginUser(email, password, history){
       dispatch({
         type: UPDATEUSERVALUES,
         data: {
-          access_token: response.data.token,
+          access_token: response.data.auth_token,
           login: true
         }
       });
@@ -143,7 +143,7 @@ export function loginUser(email, password, history){
 export function getMyData(token){
   return dispatch => {
     axios.get('http://localhost:8000/api/me', {
-      headers: { Authorization: "JWT " + token }
+      headers: { Authorization: "Token " + token }
     })
     .then((response) => {
       dispatch({
@@ -152,7 +152,7 @@ export function getMyData(token){
       })
 
       axios.get('http://localhost:8000/api/'+ response.data.id +'/balance', {
-        headers: { Authorization: "JWT " + token }
+        headers: { Authorization: "Token " + token }
       })
       .then((balance_response) => {
         dispatch({
@@ -167,7 +167,7 @@ export function getMyData(token){
       })
 
       axios.get('http://localhost:8000/api/'+ response.data.id +'/transfers', {
-        headers: { Authorization: "JWT " + token }
+        headers: { Authorization: "Token " + token }
       })
       .then((transfers_response) => {
         dispatch({
@@ -201,7 +201,7 @@ export function getYourMoney(user){
       ],
       description: 'Te lo ganaste con tu trabajo, Felicidades!!'
     },{
-      headers: { Authorization: "JWT " + user.access_token }
+      headers: { Authorization: "Token " + user.access_token }
     })
     .then((response)=> {
       dispatch({
@@ -238,7 +238,7 @@ export function getMyBalance(user, token){
   return dispatch => {
     if (user && token){
       axios.get('http://localhost:8000/api/'+ user +'/balance', {
-        headers: { Authorization: "JWT " + token }
+        headers: { Authorization: "Token " + token }
       })
       .then((response) => {
         dispatch({
@@ -259,7 +259,7 @@ export function getMyTransfers(user, token){
   return dispatch => {
     if (user && token){
       axios.get('http://localhost:8000/api/'+ user +'/transfers', {
-        headers: { Authorization: "JWT " + token }
+        headers: { Authorization: "Token " + token }
       })
       .then((response) => {
         dispatch({
@@ -338,7 +338,7 @@ export function makeTransfer(to, from){
       ],
       description: to.description
     },{
-      headers: { Authorization: "JWT " + from.access_token }
+      headers: { Authorization: "Token " + from.access_token }
     })
     .then((response)=> {
       dispatch({
@@ -376,7 +376,7 @@ export function searchName(token, value){
     axios
     .get('http://localhost:8000/api/search_mail?email=' + value,
     {
-      headers: { Authorization: "JWT " + token }
+      headers: { Authorization: "Token " + token }
     })
     .then((response)=> {
       dispatch({

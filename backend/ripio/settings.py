@@ -32,10 +32,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'monedaapp',
-    'userapp',
     'rest_framework',
-    'rest_framework_jwt',
+    'rest_framework.authtoken',
     'django_elasticsearch_dsl',
     'djoser',
     'corsheaders',
@@ -46,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'monedaapp',
+    'userapp',
 ]
 
 MIDDLEWARE = [
@@ -117,12 +117,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
 }
 
-JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=15),
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('JWT',),
 }
 
 CACHES = {
