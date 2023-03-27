@@ -1,7 +1,7 @@
 Django>=2.1.6
 psycopg2
 django-extensions==2.1.0
-redis==2.10.3
+redis==4.5.3
 django-redis==4.9.0
 djangorestframework>=3.9.1
 djangorestframework-simplejwt==4.2.0
